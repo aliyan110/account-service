@@ -5,7 +5,6 @@ import com.bank.account.dto.TransferDTO;
 import com.bank.account.kafkaClients.AccountServiceProducer;
 import com.bank.account.model.Account;
 import com.bank.account.dto.AccountDTO;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.ws.rs.core.Response;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -50,7 +49,7 @@ public class AccountResource {
     }
 
     // ---- Payment Transfer Endpoint ----
-    @PUT
+    @POST
     @Path("/{accNo}/transfer")
     @Transactional
     public Response transfer(@PathParam("accNo") String fromAccount, TransferDTO dto) throws Exception {
