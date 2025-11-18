@@ -3,7 +3,7 @@ WORKDIR /workspace
 
 COPY pom.xml .
 COPY src src
-RUN mvn package -DskipTests
+RUN mvn clean package -DskipTests
 
 FROM amazoncorretto:17
 WORKDIR /app
