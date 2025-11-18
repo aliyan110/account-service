@@ -11,7 +11,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.eclipse.microprofile.config.ConfigProvider;
 
-import java.io.File;
+import java.io.*;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Properties;
@@ -32,8 +32,8 @@ public class TransactionFailedConsumer {
     @PostConstruct
     public void init() throws Exception {
 
-        File svcPem = new File(getClass().getClassLoader().getResource("svc-pem.pem").toURI());
-        File caPem = new File(getClass().getClassLoader().getResource("ca-pem.pem").toURI());
+        File svcPem = getResourceAsTempFile("svc-pem.pem");
+        File caPem = getResourceAsTempFile("ca-pem.pem");
 
         Properties props = new Properties();
         props.put("bootstrap.servers", "kafka-1bf98848-cloud-50a3.b.aivencloud.com:20752");
@@ -85,5 +85,18 @@ public class TransactionFailedConsumer {
         } finally {
             consumer.close(); // only runs if the loop exits (like on shutdown)
         }
+    }
+
+    private File getResourceAsTempFile(String resourceName) throws IOException {
+        InputStream is = getClass().getClassLoader().getResourceAsStream(resourceName);
+        if (is == null) {
+            throw new FileNotFoundException("Resource not found: " + resourceName);
+        }
+        File tempFile = File.createTempFile(resourceName, ".pem");
+        tempFile.deleteOnExit(); // optional cleanup
+        try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+            is.transferTo(fos);
+        }
+        return tempFile;
     }
 }
