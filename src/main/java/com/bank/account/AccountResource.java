@@ -6,10 +6,8 @@ import com.bank.account.kafkaClients.AccountServiceProducer;
 import com.bank.account.model.Account;
 import com.bank.account.dto.AccountDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.smallrye.reactive.messaging.kafka.KafkaRecord;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.reactive.messaging.Channel;
-import org.eclipse.microprofile.reactive.messaging.Emitter;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -57,8 +55,9 @@ public class AccountResource {
     // ---- Payment Transfer Endpoint ----
     @PUT
     @Path("/{accNo}/transfer")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response transfer(@PathParam("accNo") String fromAccount, TransferDTO dto) throws Exception {
+    public Response transfer(@PathParam("accNo") String fromAccount,  @RequestBody TransferDTO dto) throws Exception {
         Account acc = Account.find("accountNumber", fromAccount).firstResult();
         if (acc == null) throw new NotFoundException("From Account not found");
 

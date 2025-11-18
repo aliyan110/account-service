@@ -55,11 +55,11 @@ public class TransactionFailedConsumer {
         consumer = new KafkaConsumer<String, TransactionEvent>(props);
         consumer.subscribe(Arrays.asList(topic));
 
-        System.out.println("TransactionInitiatedConsumer started and listening…");
+        System.out.println("TransactionFailedConsumer started and listening…");
 
         // Start polling in a single thread
         Thread pollingThread = new Thread(this::startPolling);
-        pollingThread.setName("TransactionConsumerThread");
+        pollingThread.setName("TransactionFailedThread");
         pollingThread.start();
     }
 
