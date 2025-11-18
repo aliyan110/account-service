@@ -7,7 +7,7 @@ RUN mvn clean package -DskipTests
 
 FROM amazoncorretto:17
 WORKDIR /app
-COPY --from=build /workspace/target/account-service-1.0.0-SNAPSHOT.jar app.jar
+COPY --from=build /workspace/target/quarkus-app/quarkus-run.jar app.jar
 
 EXPOSE 8080
 ENV PORT=8080
